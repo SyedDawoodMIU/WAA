@@ -1,0 +1,378 @@
+
+
+
+1: c
+2: b
+3: a
+4: a
+
+Question 2:
+
+1: Autowiring is used to inject dependencies into required places. There are parameter autowiring and constructor autowiring of the dependencies.
+
+2: Statless: The Rest resources are stateless, that mean, to be entertained by the server, it does require a previous state from client. Each request contains no context about the previous request.
+
+Server-Client: The architecture must consist of a server which provides the resources and a client that may be of any kind requesting access of resources from the server through standard URIs. 
+
+
+
+
+Question 3:
+
+package com.example.mockexam1.controller;
+
+import com.example.mockexam1.entity.Course;
+import com.example.mockexam1.entity.Student;
+import com.example.mockexam1.service.IStudentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/students")
+@CrossOrigin(origins = "*")
+public class StudentController {
+    @Autowired
+    private IStudentService studentService;
+
+    @GetMapping
+    public List<Student> findAll(@RequestParam(required = false) Double gpa,
+                                 @RequestParam(required = false, defaultValue = "false") Boolean msc){
+        if (msc && gpa != null){
+            return studentService.getStudentsInMscWithGpaLessThan(gpa);
+        } else if (gpa != null){
+            return studentService.getStudentsWithGpaLessThanOrEqual(gpa);
+        }
+        return studentService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Student findById(@PathVariable int id){
+        return studentService.findById(id);
+    }
+
+    @PostMapping
+    public Student save(@RequestBody Student student){
+        return studentService.save(student);
+    }
+
+    @PutMapping("/{id}")
+    public Student update(@PathVariable int id, @RequestBody Student student){
+        return studentService.update(id, student);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable int id){
+        studentService.deleteById(id);
+    }
+
+    @GetMapping("/{id}/courses")
+    public List<Course> getCoursesByStudent(@PathVariable int id){
+        return studentService.getCoursesByStudent(id);
+    }
+
+}
+
+
+
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+
+package com.example.mockexam1.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+
+import java.util.List;
+
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+public class Address {
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Integer id;
+
+    private String street;
+
+    private String city;
+
+    private String state;
+
+    private String zip;
+
+    @OneToMany(mappedBy = "address")
+    private List<Student> students;
+
+}
+
+
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+
+
+package com.example.mockexam1.entity;
+
+import jakarta.persistence.*;
+import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+public class Course {
+    @Id
+    private Integer id;
+
+    private String name;
+
+    @ManyToMany(mappedBy = "courses")
+    private List<Student> students;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private CourseDetails courseDetails;
+
+
+}
+
+
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+
+
+package com.example.mockexam1.entity;
+
+import jakarta.persistence.*;
+import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+
+import java.util.List;
+
+@Entity
+public class CourseDetails {
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private int id;
+
+    private String description;
+
+    private String program;
+
+    @OneToOne(mappedBy = "courseDetails", cascade = CascadeType.ALL)
+    private Course course;
+
+}
+
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+
+package com.example.mockexam1.entity;
+
+import jakarta.persistence.*;
+import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+
+import java.util.List;
+
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+public class Student {
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Integer id;
+
+    private String name;
+
+    private double gpa;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "address_id")
+    private Address address;
+
+    @ManyToMany(mappedBy = "students", fetch = FetchType.LAZY)
+    private List<Course> courses;
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+}
+
+
+
+
+----------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+
+package com.example.mockexam1.repo;
+
+import com.example.mockexam1.entity.Student;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface StudentRepository extends JpaRepository<Student, Integer> {
+
+    @Query("SELECT s FROM Student s JOIN s.courses c WHERE s.gpa <= :gpa")
+    List<Student> findByGpaLessThanEqual(double gpa);
+
+    @Query("SELECT s FROM Student s JOIN s.courses c WHERE c.courseDetails.program = 'MSC' AND s.gpa < :gpa")
+    List<Student> findMscStudentsWithGpaLessThan(double gpa);
+}
+
+
+
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+
+package com.example.mockexam1.service;
+
+import com.example.mockexam1.entity.Course;
+import com.example.mockexam1.entity.Student;
+
+import java.util.List;
+
+public interface IStudentService {
+    List<Student> findAll();
+
+    Student findById(int id);
+
+    Student save(Student student);
+
+    Student update(int id, Student student);
+
+    void deleteById(int id);
+
+    List<Course> getCoursesByStudent(int id);
+
+    List<Student> getStudentsWithGpaLessThanOrEqual(double gpa);
+
+    List<Student> getStudentsInMscWithGpaLessThan(double gpa);
+}
+
+
+
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+
+
+package com.example.mockexam1.service.implementation;
+
+import com.example.mockexam1.entity.Course;
+import com.example.mockexam1.entity.Student;
+import com.example.mockexam1.repo.StudentRepository;
+import com.example.mockexam1.service.IStudentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class StudentService implements IStudentService {
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+
+    @Override
+    public List<Student> findAll() {
+        return studentRepository.findAll();
+    }
+
+    @Override
+    public Student findById(int id) {
+        return studentRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Student save(Student student) {
+        return studentRepository.save(student);
+    }
+
+    @Override
+    public Student update(int id, Student student) {
+        if (studentRepository.existsById(id))
+        {
+            return studentRepository.save(student);
+
+        }
+        return null;
+    }
+
+    @Override
+    public void deleteById(int id) {
+        studentRepository.deleteById(id);
+
+    }
+
+    @Override
+    public List<Course> getCoursesByStudent(int id) {
+        Student student = studentRepository.findById(id).orElse(null);
+        if (student != null) {
+            return student.getCourses();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Student> getStudentsWithGpaLessThanOrEqual(double gpa) {
+        return studentRepository.findByGpaLessThanEqual(gpa);
+    }
+
+    @Override
+
+    public List<Student> getStudentsInMscWithGpaLessThan(double gpa) {
+        return studentRepository.findMscStudentsWithGpaLessThan(gpa);
+    }
+}
+
+
+
+
+
+----------------------------------------------------------------------------
+----------------------------------------------------------------------------
+
+
+package com.example.mockexam1.aspects;
+
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+
+@Aspect
+public class MyAspect {
+
+    @Pointcut("execution(public List<Student> com.example.mockexam1.controller.*(..))")
+    private void listReturningMethodStudentController() {}
+
+
+    @AfterReturning(
+            pointcut = "listReturningMethodStudentController()",
+            returning= "result")
+    public void afterReturningAdvice(JoinPoint joinPoint, Object result){
+        sendAlert(joinPoint);
+    }
+
+    public void sendAlert(JoinPoint joinPoint) {
+        // implementation to send alert
+    }
+}
