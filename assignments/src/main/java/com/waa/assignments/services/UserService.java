@@ -10,4 +10,6 @@ public interface UserService extends BaseService<UserDto, Long> {
 
     void update(Long id, UserDto p);
 
+    List<UserDto> findUsersByPostTitle(String title);
+
 }

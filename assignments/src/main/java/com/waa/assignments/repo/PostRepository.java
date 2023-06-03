@@ -17,4 +17,6 @@ public interface PostRepository extends JpaRepository<Post,Integer> {
     @Query( "delete from Post p where p.id = :id" )
     void deleteByID(Integer id);
 
+    List<Post> findByTitle(String title);
+
 }

@@ -68,4 +68,10 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
+    @Override
+    public List<UserDto> findUsersByPostTitle(String title) {
+        var users = userRepository.findUsersByPostTitle(title);
+        return listMapper.mapList(users, UserDto.class);
+    }
+
 }
