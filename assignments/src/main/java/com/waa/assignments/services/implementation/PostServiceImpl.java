@@ -1,5 +1,6 @@
 package com.waa.assignments.services.implementation;
 
+import com.waa.assignments.aspect.annotation.ExecutionTime;
 import com.waa.assignments.entity.business.Post;
 import com.waa.assignments.entity.dto.PostDto;
 import com.waa.assignments.helper.ListMapper;
@@ -33,6 +34,7 @@ public class PostServiceImpl implements PostService {
         return listMapper.mapList(posts, PostDto.class);
     }
 
+    @ExecutionTime
     @Override
     public PostDto getById(Integer id) {
 

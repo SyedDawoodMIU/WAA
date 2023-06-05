@@ -1,5 +1,6 @@
 package com.waa.assignments.services.implementation;
 
+import com.waa.assignments.aspect.annotation.ExecutionTime;
 import com.waa.assignments.entity.business.User;
 import com.waa.assignments.entity.dto.UserDto;
 import com.waa.assignments.helper.ListMapper;
@@ -34,10 +35,16 @@ public class UserServiceImpl implements UserService {
         return listMapper.mapList(Users, UserDto.class);
     }
 
+    @ExecutionTime
     @Override
-    public UserDto getById(Long id) {
+    public UserDto getById(Long id) throws Exception {
+    var user = userRepository.findById(id);
 
-        return modelMapper.map(userRepository.getById(id), UserDto.class);
+        if (user.isPresent())
+        {
+            return modelMapper.map(user.get(), UserDto.class);
+        }
+        throw  new Exception("My exception");
     }
 
     @Override

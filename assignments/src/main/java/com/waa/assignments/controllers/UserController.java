@@ -1,5 +1,6 @@
 package com.waa.assignments.controllers;
 
+import com.waa.assignments.aspect.annotation.ExecutionTime;
 import com.waa.assignments.entity.dto.CommentDto;
 import com.waa.assignments.entity.dto.UserDto;
 import com.waa.assignments.services.CommentService;
@@ -41,7 +42,7 @@ public class UserController {
     }
 
     @GetMapping("/v1/Users/{id}")
-    public ResponseEntity<UserDto> getById(@PathVariable Long id) {
+    public ResponseEntity<UserDto> getById(@PathVariable Long id) throws Exception {
         var User = UserService.getById(id);
         return ResponseEntity.ok(User);
     }

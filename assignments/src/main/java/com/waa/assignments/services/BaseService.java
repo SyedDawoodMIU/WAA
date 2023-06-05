@@ -4,7 +4,7 @@ public interface BaseService<T, ID> {
 
     public void save(T t);
 
-    public T getById(ID id);
+    public T getById(ID id) throws Exception;
 
     public void delete(T t);
 

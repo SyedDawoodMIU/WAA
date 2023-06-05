@@ -39,7 +39,7 @@ public class PostController {
     }
 
     @GetMapping("/v1/posts/{id}")
-    public ResponseEntity<PostDto> getById(@PathVariable int id) {
+    public ResponseEntity<PostDto> getById(@PathVariable int id) throws Exception {
         var post = postService.getById(id);
         return ResponseEntity.ok(post);
     }
@@ -71,7 +71,7 @@ public class PostController {
     }
 
     @GetMapping("/v2/posts/{id}")
-    public ResponseEntity<PostV2Dto> getByIdV2(@PathVariable int id) {
+    public ResponseEntity<PostV2Dto> getByIdV2(@PathVariable int id) throws Exception {
         var post = postService.getById(id);
         return ResponseEntity.ok(modelMapper.map(post, PostV2Dto.class));
     }
