@@ -17,7 +17,7 @@ public class ExceptionAspect {
     @AfterThrowing(pointcut = "execution(* *..*Service.*(..))", throwing = "ex")
     public void logException(Exception ex) {
         ExceptionEntity exceptionEntity = new ExceptionEntity();
-        exceptionEntity.setPrinciple("Your static user");
+        exceptionEntity.setPrinciple("user");
         exceptionEntity.setDate(LocalDateTime.now());
         exceptionEntity.setOperation(ex.getStackTrace()[0].toString());
         exceptionEntity.setException(ex.getClass().getName());
