@@ -81,4 +81,9 @@ public class UserServiceImpl implements UserService {
         return listMapper.mapList(users, UserDto.class);
     }
 
+    @Override
+    public UserDto loadUserByUsername(String username) {
+        return modelMapper.map(userRepository.findByUsername(username), UserDto.class);
+    }
+
 }

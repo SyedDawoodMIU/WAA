@@ -18,5 +18,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
     List<User> findUsersByPostTitle(String title);
 
 
-
+    @Query("SELECT u FROM User u WHERE u.name = :username")
+    User findByUsername(String username);
 }

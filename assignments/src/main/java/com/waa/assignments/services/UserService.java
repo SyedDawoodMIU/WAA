@@ -12,4 +12,5 @@ public interface UserService extends BaseService<UserDto, Long> {
 
     List<UserDto> findUsersByPostTitle(String title);
 
+    UserDto loadUserByUsername(String username);
 }
