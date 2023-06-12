@@ -1,0 +1,39 @@
+.post-block {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #ccc;
+  margin: 10px;
+  background-color: #4f81bd;
+  color: white;
+  border-color: darkblue;
+}
+
+.posts-block {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.post-name {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.post-price {
+  font-weight: bold;
+}
+
+.post-description {
+  margin-top: 10px;
+}
+
+.add-to-cart-button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+}
