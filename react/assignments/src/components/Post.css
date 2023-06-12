@@ -37,3 +37,16 @@
   background-color: #fff;
   cursor: pointer;
 }
+
+.post-from {
+  background-color: #fff;
+  cursor: pointer;
+  margin-top: 10px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.post-from * {
+  margin-left: 10px;
+}

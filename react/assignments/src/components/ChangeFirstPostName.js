@@ -4,7 +4,7 @@ const ChangeFirstPostName = ({ setFirstPostName }) => {
   const [textBoxValue, setTextBoxValue] = React.useState("");
 
   return (
-    <div>
+    <div className="post-from">
       <label>First Post Name: </label>
       <input
         type="text"
@@ -13,7 +13,6 @@ const ChangeFirstPostName = ({ setFirstPostName }) => {
         }}
       ></input>
       <button
-        style={{ marginLeft: "10px" }}
         onClick={() => {
           setFirstPostName(textBoxValue);
         }}
