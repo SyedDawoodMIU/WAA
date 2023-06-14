@@ -1,9 +1,9 @@
 import React from "react";
-import Posts from "../components/Posts";
-import "../pages/Dashboard.css";
-import ChangeFirstPostName from "../components/ChangeFirstPostName";
+import Posts from "../components/posts/Posts";
+import "./Dashboard.css";
+import ChangeFirstPostName from "../components/posts/ChangeFirstPostName";
 
-const Dashboard = (props) => {
+const Dashboard = (props:any) => {
   const [firstPostName, setFirstPostName] = React.useState("");
 
   return (

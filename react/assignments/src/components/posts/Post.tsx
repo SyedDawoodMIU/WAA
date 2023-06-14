@@ -1,7 +1,16 @@
 import React from "react";
-import "../components/Post.css";
+import "./Post.css";
+import { iPost } from "./PostsTypes";
 
-const Post = ({ post, deletePost, changePostDetails }) => {
+const Post = ({
+  post,
+  deletePost,
+  changePostDetails,
+}: {
+  post: iPost;
+  deletePost: any;
+  changePostDetails: any;
+}) => {
   const [toggleDetails, setToggleDetails] = React.useState(false);
 
   if (!post) {

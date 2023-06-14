@@ -1,6 +1,10 @@
 import React from "react";
 
-const ChangeFirstPostName = ({ setFirstPostName }) => {
+const ChangeFirstPostName = ({
+  setFirstPostName,
+}: {
+  setFirstPostName: any;
+}) => {
   const [textBoxValue, setTextBoxValue] = React.useState("");
 
   return (
