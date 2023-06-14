@@ -5,7 +5,7 @@ import com.waa.assignments.entity.dto.AuthResponse;
 import com.waa.assignments.entity.dto.RoleDto;
 import com.waa.assignments.security.JwtTokenUtil;
 import com.waa.assignments.services.RoleService;
-import com.waa.assignments.services.UserService;
+import com.waa.assignments.services.implementation.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +36,7 @@ public class AuthController {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
     private final AuthenticationManager authenticationManager;
 
     public AuthController(AuthenticationManager authenticationManager) {
@@ -51,9 +52,9 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
 
-        var userName = userService.loadUserByUsername(authRequest.getUsername()).getName();
+        var user = userService.loadUserByUsername(authRequest.getUsername());
         var roles =  roleService.getAll().stream().map(RoleDto::getName).map(SimpleGrantedAuthority::new).toList();
-        UserDetails userDetails = new User(userName, "", roles);
+        UserDetails userDetails = new User(user.getUsername(), "", roles);
         String token = jwtTokenUtil.generateToken(userDetails);
 
         return ResponseEntity.ok(new AuthResponse(token));

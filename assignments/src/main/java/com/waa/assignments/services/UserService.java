@@ -1,6 +1,7 @@
 package com.waa.assignments.services;
 
 import com.waa.assignments.entity.dto.UserDto;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
@@ -12,5 +13,7 @@ public interface UserService extends BaseService<UserDto, Long> {
 
     List<UserDto> findUsersByPostTitle(String title);
 
-    UserDto loadUserByUsername(String username);
+    UserDetails loadUserByUsername(String username);
+
+
 }

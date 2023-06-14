@@ -4,7 +4,7 @@ import com.waa.assignments.aspect.annotation.ExecutionTime;
 import com.waa.assignments.entity.dto.CommentDto;
 import com.waa.assignments.entity.dto.UserDto;
 import com.waa.assignments.services.CommentService;
-import com.waa.assignments.services.UserService;
+import com.waa.assignments.services.implementation.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

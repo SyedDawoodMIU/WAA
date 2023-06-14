@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:3000"})
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PostController {
 
     private final PostService postService;

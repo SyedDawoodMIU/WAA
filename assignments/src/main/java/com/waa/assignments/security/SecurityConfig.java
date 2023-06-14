@@ -2,6 +2,7 @@ package com.waa.assignments.security;
 
 import com.waa.assignments.entity.dto.RoleDto;
 import com.waa.assignments.services.RoleService;
+import com.waa.assignments.services.implementation.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -38,14 +39,8 @@ public class SecurityConfig {
         this.roleService = roleService;
     }
 
-
-
-
-
-    @Bean
-    public UserDetailsService userDetailsSvc() {
-        return userDetailsService;
-    }
+    @Autowired
+    public UserService userService;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -62,7 +57,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/v1/authenticate/**").permitAll()
 //                .requestMatchers("/api/v1/products").hasAuthority("CLIENT")
                 .requestMatchers("/api/v1/products").hasAnyAuthority(roles) // Dynamic authorities
-                .anyRequest().hasAnyRole(roles)
+//                .anyRequest().hasAnyRole(roles)
+                .anyRequest().permitAll()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -86,7 +82,7 @@ public class SecurityConfig {
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 
-        authProvider.setUserDetailsService(userDetailsSvc());
+        authProvider.setUserDetailsService(userService);
         authProvider.setPasswordEncoder(passwordEncoder());
 
         return authProvider;

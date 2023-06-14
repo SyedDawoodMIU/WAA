@@ -5,12 +5,12 @@ import com.waa.assignments.entity.business.User;
 import com.waa.assignments.entity.dto.UserDto;
 import com.waa.assignments.helper.ListMapper;
 import com.waa.assignments.repo.UserRepository;
-import com.waa.assignments.services.UserService;
-
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class UserServiceImpl implements UserService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
@@ -29,14 +29,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     ListMapper listMapper;
 
-    @Override
     public List<UserDto> findAll() {
         var Users = userRepository.findAll();
         return listMapper.mapList(Users, UserDto.class);
     }
 
     @ExecutionTime
-    @Override
     public UserDto getById(Long id) throws Exception {
     var user = userRepository.findById(id);
 
@@ -47,21 +45,18 @@ public class UserServiceImpl implements UserService {
         throw  new Exception("My exception");
     }
 
-    @Override
     public void delete(UserDto UserDto) {
 
         userRepository.delete(modelMapper.map(UserDto, User.class));
 
     }
 
-    @Override
     public void save(UserDto p) {
 
         userRepository.save(modelMapper.map(p, User.class));
 
     }
 
-    @Override
     public void update(Long id, UserDto p) {
 
         if (userRepository.existsById(id)) {
@@ -70,20 +65,19 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
     public void deleteByID(Long id) {
         userRepository.deleteById(id);
     }
 
-    @Override
     public List<UserDto> findUsersByPostTitle(String title) {
         var users = userRepository.findUsersByPostTitle(title);
         return listMapper.mapList(users, UserDto.class);
     }
 
     @Override
-    public UserDto loadUserByUsername(String username) {
-        return modelMapper.map(userRepository.findByUsername(username), UserDto.class);
+    public UserDetails loadUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
+
 
 }

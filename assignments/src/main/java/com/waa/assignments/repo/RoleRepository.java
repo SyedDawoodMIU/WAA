@@ -6,8 +6,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RoleRepository extends JpaRepository<Role, Integer> {
     @Query("SELECT r FROM Role r")
     List<Role> getAll();
+
+    Optional<Role> findByName(String name);
 }
