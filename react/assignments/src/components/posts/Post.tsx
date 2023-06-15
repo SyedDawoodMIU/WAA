@@ -1,6 +1,7 @@
 import React from "react";
 import "./Post.css";
 import { iPost } from "./PostsTypes";
+import axios from "axios";
 
 const Post = ({
   post,

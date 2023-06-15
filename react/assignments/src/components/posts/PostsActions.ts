@@ -1,33 +1,17 @@
 import * as Service from "./PostService";
 import {
-  FETCH_POSTS_REQUEST,
-  FETCH_POSTS_SUCCESS,
-  FETCH_POSTS_FAILURE,
-  PostsActionTypes,
-  iPost,
-} from "./PostsTypes";
-
-export const fetchPostsRequest = (): PostsActionTypes => ({
-  type: FETCH_POSTS_REQUEST,
-});
-
-export const fetchPostsSuccess = (posts: iPost[]): PostsActionTypes => ({
-  type: FETCH_POSTS_SUCCESS,
-  payload: posts,
-});
-
-export const fetchPostsFailure = (error: string): PostsActionTypes => ({
-  type: FETCH_POSTS_FAILURE,
-  error,
-});
+  setPostsFailure,
+  setPostsRequest,
+  setPostsSuccess,
+} from "./PostsSlice";
 
 export const fetchPosts = () => async (dispatch: any) => {
-  dispatch(fetchPostsRequest());
+  dispatch(setPostsRequest());
   try {
     const response = await Service.getPosts();
-    const posts = response.data;
-    dispatch(fetchPostsSuccess(posts));
+    const posts = response;
+    dispatch(setPostsSuccess(posts));
   } catch (error: any) {
-    dispatch(fetchPostsFailure(error.message));
+    dispatch(setPostsFailure(error.message));
   }
 };

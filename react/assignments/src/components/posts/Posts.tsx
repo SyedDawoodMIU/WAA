@@ -6,7 +6,7 @@ import { fetchPosts } from "./PostsActions";
 import { iPost } from "./PostsTypes";
 import Post from "./Post";
 
-const Posts = ({ firstPostName }: { firstPostName: String }) => {
+const Posts = ({ firstPostName }: { firstPostName: string }) => {
   const dispatch = useAppDispatch();
 
   const { posts, error, loading } = useAppSelector((state) => state.posts);
@@ -18,8 +18,7 @@ const Posts = ({ firstPostName }: { firstPostName: String }) => {
 
   useEffect(() => {
     setPosts(posts ?? []);
-  }
-  , [posts]);
+  }, [posts]);
 
   useEffect(() => {
     setPosts((posts: iPost[]) =>
