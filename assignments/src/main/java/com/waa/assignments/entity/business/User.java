@@ -23,12 +23,14 @@ public class User implements UserDetails {
 
 
     // Unidirectional One-to-Many relationship
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
     private List<Post> posts;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name="user_id"),
+            inverseJoinColumns = @JoinColumn(name="role_id"))
     private List<Role> roles;
 
 

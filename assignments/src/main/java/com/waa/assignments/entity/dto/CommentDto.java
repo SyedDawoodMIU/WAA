@@ -9,5 +9,5 @@ import lombok.Data;
 public class CommentDto {
     private long id;
     private String name;
-    private Post post;
+    private PostDto post;
 }

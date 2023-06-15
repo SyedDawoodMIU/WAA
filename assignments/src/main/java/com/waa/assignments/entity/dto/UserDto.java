@@ -3,10 +3,9 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class UserDto  {
-
+public class UserDto {
     private long id;
     private String name;
     private List<PostDto> posts;
-
+    private List<RoleDto> roles;
 }

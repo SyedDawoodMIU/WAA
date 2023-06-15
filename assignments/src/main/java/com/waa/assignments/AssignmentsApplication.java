@@ -8,8 +8,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
+@EnableTransactionManagement
 public class AssignmentsApplication implements CommandLineRunner {
 
 	@Autowired
@@ -18,13 +20,6 @@ public class AssignmentsApplication implements CommandLineRunner {
 		SpringApplication.run(AssignmentsApplication.class, args);
 	}
 
-	@Bean
-	public ModelMapper modelMapper() {
-		ModelMapper modelMapper = new ModelMapper();
-		// Optionally: define custom field mappings
-		// modelMapper.addMappings(new PropertyMap<>() { ... });
-		return modelMapper;
-	}
 
 	@Override
 	public void run(String... args) {

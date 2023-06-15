@@ -16,19 +16,23 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    ModelMapper modelMapper;
+
 
     @Autowired
     ListMapper listMapper;
 
+    private final ModelMapper modelMapper;
+
+    @Autowired
+    public UserService(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
     public List<UserDto> findAll() {
         var Users = userRepository.findAll();
         return listMapper.mapList(Users, UserDto.class);
@@ -51,10 +55,9 @@ public class UserService implements UserDetailsService {
 
     }
 
-    public void save(UserDto p) {
-
-        userRepository.save(modelMapper.map(p, User.class));
-
+    public void save(UserDto userDto) {
+        User user = modelMapper.map(userDto, User.class);
+        userRepository.save(user);
     }
 
     public void update(Long id, UserDto p) {
