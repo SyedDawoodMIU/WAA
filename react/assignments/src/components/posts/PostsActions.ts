@@ -1,17 +1,44 @@
 import * as Service from "./PostService";
 import {
-  setPostsFailure,
-  setPostsRequest,
-  setPostsSuccess,
+  deletePostFailure,
+  deletePostRequest,
+  deletePostSuccess,
+  getPostsFailure,
+  getPostsRequest,
+  getPostsSuccess,
 } from "./PostsSlice";
 
 export const fetchPosts = () => async (dispatch: any) => {
-  dispatch(setPostsRequest());
+  dispatch(getPostsRequest());
   try {
     const response = await Service.getPosts();
     const posts = response;
-    dispatch(setPostsSuccess(posts));
+    dispatch(getPostsSuccess(posts));
   } catch (error: any) {
-    dispatch(setPostsFailure(error.message));
+    dispatch(getPostsFailure(error.message));
   }
 };
+
+
+export const deletePost = (id: number) => async (dispatch: any) => {
+  dispatch(deletePostRequest());
+  try {
+    await Service.deletePost(id);
+    dispatch(deletePostSuccess(id));
+  } catch (error: any) {
+    dispatch(deletePostFailure(error.message));
+  }
+}
+
+
+export const addPost = (post: any) => async (dispatch: any) => {
+  dispatch(deletePostRequest());
+  try {
+    await Service.addPost(post);
+    dispatch(deletePostSuccess(post));
+  } catch (error: any) {
+    dispatch(deletePostFailure(error.message));
+  }
+}
+
+

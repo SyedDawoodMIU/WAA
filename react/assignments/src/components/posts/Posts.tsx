@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../../base/hooks";
 
-import { fetchPosts } from "./PostsActions";
+import { fetchPosts, deletePost, addPost } from "./PostsActions";
 import { iPost } from "./PostsTypes";
 import Post from "./Post";
 
@@ -50,9 +50,8 @@ const Posts = ({ firstPostName }: { firstPostName: string }) => {
     setPosts(newPosts);
   }
 
-  function deletePost(id: any) {
-    const newPosts = Posts.filter((post: iPost) => post.id !== id);
-    setPosts(newPosts);
+  const deleteThePost = (id: any) => {
+   dispatch(deletePost(id));
   }
 
   if (loading) {
@@ -69,7 +68,7 @@ const Posts = ({ firstPostName }: { firstPostName: string }) => {
         <Post
           post={post}
           key={post.id}
-          deletePost={deletePost}
+          deletePost={() => deleteThePost(post.id)}
           changePostDetails={changePostDetails}
         />
       ))}

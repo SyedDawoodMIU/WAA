@@ -1,7 +1,7 @@
 
 
 export interface iPost {
-  id: number;
+  id?: number;
   title: any;
   author: any;
   details: any;
